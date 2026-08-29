@@ -1,0 +1,47 @@
+name: Build iOS IPA (MobAI iOS Builder)
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java Development Kit
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install Flutter Dependencies
+        run: flutter pub get
+
+      - name: Build iOS App Payload
+        run: flutter build ios --release --no-codesign
+
+      - name: Package iOS IPA Payload
+        run: |
+          mkdir -p Payload
+          mv build/ios/iphoneos/Runner.app Payload/
+          zip -r -9 rapid_smart_attendance.ipa Payload
+          mkdir -p dist
+          mv rapid_smart_attendance.ipa dist/
+
+      - name: Upload iOS IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rapid_smart_attendance-ios-ipa
+          path: dist/rapid_smart_attendance.ipa
