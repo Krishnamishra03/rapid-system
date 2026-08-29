@@ -1,21 +1,16 @@
 {
-  "project": "rapid_smart_attendance",
+  "project": "smart",
   "platform": "ios",
   "github": {
     "owner": "Krishnamishra03",
     "repo": "rapid-system"
   },
-  "ios": {
-    "path": "ios",
-    "scheme": "Runner",
-    "signing": false
-  },
+  "ios": {},
   "flutter": {
-    "watch": {
-      "dirs": ["lib"],
-      "patterns": [".dart"],
-      "ignore": [".g.dart", ".freezed.dart"],
-      "debounce": 100
-    }
-  }
+    "version": "3.41.6",
+    "watch": {}
+  },
+  "reactNative": {},
+  "kmp": {},
+  "mobai": {}
 }
