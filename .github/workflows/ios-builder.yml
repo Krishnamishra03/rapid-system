@@ -1,4 +1,4 @@
-name: Build iOS .app & .ipa (MobAI iOS Builder)
+name: Build iPhone 16 Pro Simulator .app (MobAI iOS Builder)
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-ios:
+  build-iphone-16-pro:
     runs-on: macos-latest
     steps:
       - name: Checkout repository
@@ -29,28 +29,31 @@ jobs:
       - name: Install Flutter Dependencies
         run: flutter pub get
 
-      - name: Build iOS App Payload
+      - name: Build iPhone 16 Pro Simulator .app Bundle
+        run: flutter build ios --simulator --no-codesign
+
+      - name: Build Physical iOS Device IPA
         run: flutter build ios --release --no-codesign
 
-      - name: Package .app Bundle & .ipa Payload
+      - name: Package iPhone 16 Pro .app & Device .ipa
         run: |
           mkdir -p dist
-          # Package .app bundle zip
-          cd build/ios/iphoneos
-          zip -r -9 ../../../dist/rapid_smart_attendance.app.zip Runner.app
+          # Package iPhone 16 Pro Simulator .app bundle zip
+          cd build/ios/iphonesimulator
+          zip -r -9 ../../../dist/iphone_16_pro_runner.app.zip Runner.app
           cd ../../../
-          # Package .ipa payload
+          # Package .ipa payload for hardware
           mkdir -p Payload
           cp -r build/ios/iphoneos/Runner.app Payload/
           zip -r -9 dist/rapid_smart_attendance.ipa Payload
 
-      - name: Upload iOS .app Bundle Artifact
+      - name: Upload iPhone 16 Pro Simulator .app Bundle Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: rapid_smart_attendance-ios-app-bundle
-          path: dist/rapid_smart_attendance.app.zip
+          name: iPhone-16-Pro-Simulator-App-Bundle
+          path: dist/iphone_16_pro_runner.app.zip
 
-      - name: Upload iOS IPA Artifact
+      - name: Upload Physical Device iOS IPA Artifact
         uses: actions/upload-artifact@v4
         with:
           name: rapid_smart_attendance-ios-ipa
