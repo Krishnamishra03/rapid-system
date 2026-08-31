@@ -26,6 +26,13 @@ jobs:
           channel: 'stable'
           cache: true
 
+      - name: Install CocoaPods
+        run: |
+          sudo gem install cocoapods
+          cd ios
+          pod install || true
+          cd ..
+
       - name: Install Flutter Dependencies
         run: flutter pub get
 
